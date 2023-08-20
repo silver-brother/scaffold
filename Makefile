@@ -1,6 +1,7 @@
 .PHONY:docs
 docs:
-	@swag init -dir cmd/server
+	@swag init -g ./cmd/server/main.go -o ./docs > /dev/null 2>&1
+	@echo "docs generated successfully"
 
 .PHONY:build
 build:

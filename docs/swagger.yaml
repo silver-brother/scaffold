@@ -1,4 +1,59 @@
+definitions:
+  handler.UserCreateReq:
+    properties:
+      age:
+        maximum: 120
+        minimum: 1
+        type: integer
+      email:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - nickname
+    - password
+    - username
+    type: object
+  handler.UserCreateRes:
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: get user list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回用户信息
+          schema:
+            $ref: '#/definitions/handler.UserCreateRes'
+      summary: user list
+      tags:
+      - user
+    post:
+      description: 新增用户
+      parameters:
+      - description: body参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UserCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回用户信息
+          schema:
+            $ref: '#/definitions/handler.UserCreateRes'
+      summary: 新增用户
 swagger: "2.0"

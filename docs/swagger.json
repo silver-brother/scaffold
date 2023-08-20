@@ -3,5 +3,88 @@
     "info": {
         "contact": {}
     },
-    "paths": {}
+    "paths": {
+        "/user": {
+            "get": {
+                "description": "get user list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "user list",
+                "responses": {
+                    "200": {
+                        "description": "返回用户信息",
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserCreateRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "新增用户",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增用户",
+                "parameters": [
+                    {
+                        "description": "body参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回用户信息",
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserCreateRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handler.UserCreateReq": {
+            "type": "object",
+            "required": [
+                "email",
+                "nickname",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "maximum": 120,
+                    "minimum": 1
+                },
+                "email": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.UserCreateRes": {
+            "type": "object"
+        }
+    }
 }
