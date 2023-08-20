@@ -9,9 +9,9 @@ import (
 )
 
 type Resp struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    any    `json:"data"`
+	Code int    `json:"code"` // 业务错误码,正常返回为200，错误返回为错误码
+	Msg  string `json:"msg"`  // 错误信息，如果状态码为200，msg为OK
+	Data any    `json:"data"` // 返回数据
 }
 
 func Success(ctx *gin.Context, data any) {
@@ -20,7 +20,7 @@ func Success(ctx *gin.Context, data any) {
 	}
 	ctx.Header("trace-id", getTraceIdFromContext(ctx.Request.Context()))
 	ctx.Header("span-id", getSpanIdFromContext(ctx.Request.Context()))
-	resp := Resp{Code: http.StatusOK, Message: "success", Data: data}
+	resp := Resp{Code: http.StatusOK, Msg: "OK", Data: data}
 	ctx.JSON(http.StatusOK, resp)
 }
 
@@ -30,13 +30,13 @@ func Error500(ctx *gin.Context) {
 }
 
 // Error200 200错误
-func Error200(ctx *gin.Context, code int, message string) {
-	Error(ctx, http.StatusOK, code, message, map[string]string{})
+func Error200(ctx *gin.Context, code int, Msg string) {
+	Error(ctx, http.StatusOK, code, Msg, map[string]string{})
 }
 
 // Error400 40错误
 func Error400(ctx *gin.Context, msg string) {
-	Error(ctx, http.StatusBadRequest, http.StatusBadRequest, http.StatusText(http.StatusBadRequest), msg)
+	Error(ctx, http.StatusBadRequest, http.StatusBadRequest, msg, map[string]string{})
 }
 
 // Error401 401错误
@@ -50,13 +50,13 @@ func Error404(ctx *gin.Context) {
 }
 
 // Error 通用错误
-func Error(ctx *gin.Context, httpCode, code int, message string, data interface{}) {
+func Error(ctx *gin.Context, httpCode, code int, Msg string, data interface{}) {
 	if data == nil {
 		data = map[string]string{}
 	}
 	ctx.Header("trace-id", getTraceIdFromContext(ctx.Request.Context()))
 	ctx.Header("span-id", getSpanIdFromContext(ctx.Request.Context()))
-	resp := Resp{Code: code, Message: message, Data: data}
+	resp := Resp{Code: code, Msg: Msg, Data: data}
 	ctx.JSON(httpCode, resp)
 }
 

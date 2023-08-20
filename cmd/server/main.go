@@ -12,6 +12,7 @@ import (
 	"scaffold/internal/router"
 	"scaffold/internal/service"
 	"scaffold/pkg/conf"
+	"scaffold/pkg/validator"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,9 @@ func main() {
 	e := gin.Default()
 	// 初始化路由
 	router.Router(e, svcCtx)
+
+	// 自定义验证器
+	validator.CustomValidator()
 
 	srv := &http.Server{
 		Addr:           fmt.Sprintf("%s:%d", c.Host, c.Port),

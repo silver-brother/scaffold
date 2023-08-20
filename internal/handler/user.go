@@ -23,10 +23,19 @@ func NewUserHandle(svcCtx *service.ServiceContext) *UserHandle {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param id query int false "用户ID"
-// @Success 200 {object} httpx.Resp{} "响应结果"
+// @Param query query UserListReq false "查询参数"
+// @Success 200 {object} httpx.Resp{data=UserListRes} "响应结果"
 // @Router /user [get]
 func (l *UserHandle) List(ctx *gin.Context) {
+	// 参数验证
+	var req UserListReq
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		l.svcCtx.Log.Error().Ctx(ctx.Request.Context()).Msg(err.Error())
+		httpx.Error400(ctx, err.Error())
+		return
+	}
+
+	// 数据查询
 	user, err := l.svcCtx.DBClient.GetUserById(ctx, 1)
 	exists, err := errorx.CheckDBErr(err)
 	if err != nil {
@@ -44,13 +53,14 @@ func (l *UserHandle) List(ctx *gin.Context) {
 
 // @Summary 新增用户
 // @Description 新增用户
-// @Tags 分组名称
+// @Tags user
 // @Accept json
 // @Produce json
 // @Param body body UserCreateReq true "body参数"
 // @Success 200 {object} httpx.Resp "响应结果"
 // @Router /user [post]
 func (l *UserHandle) Create(ctx *gin.Context) {
+	// 参数验证
 	var req UserCreateReq
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {

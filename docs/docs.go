@@ -32,8 +32,44 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "用户ID",
-                        "name": "id",
+                        "example": 101,
+                        "description": "年龄",
+                        "name": "age",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "2020-01-01",
+                        "description": "生日",
+                        "name": "birthday",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "zhangsanfeng@163.com",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "13888888888",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "张三疯",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "example": "张三",
+                        "description": "用户名",
+                        "name": "username",
                         "in": "query"
                     }
                 ],
@@ -41,7 +77,19 @@ const docTemplate = `{
                     "200": {
                         "description": "响应结果",
                         "schema": {
-                            "$ref": "#/definitions/httpx.Resp"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/scaffold_common_httpx.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/internal_handler.UserListRes"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -55,7 +103,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "分组名称"
+                    "user"
                 ],
                 "summary": "新增用户",
                 "parameters": [
@@ -65,7 +113,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.UserCreateReq"
+                            "$ref": "#/definitions/internal_handler.UserCreateReq"
                         }
                     }
                 ],
@@ -73,7 +121,7 @@ const docTemplate = `{
                     "200": {
                         "description": "响应结果",
                         "schema": {
-                            "$ref": "#/definitions/httpx.Resp"
+                            "$ref": "#/definitions/scaffold_common_httpx.Resp"
                         }
                     }
                 }
@@ -81,7 +129,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handler.UserCreateReq": {
+        "internal_handler.UserCreateReq": {
             "type": "object",
             "required": [
                 "email",
@@ -109,14 +157,58 @@ const docTemplate = `{
                 }
             }
         },
-        "httpx.Resp": {
+        "internal_handler.UserListItem": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
+        "internal_handler.UserListRes": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.UserListItem"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "scaffold_common_httpx.Resp": {
             "type": "object",
             "properties": {
                 "code": {
+                    "description": "业务错误码,正常返回为200，错误返回为错误码",
                     "type": "integer"
                 },
-                "data": {},
-                "message": {
+                "data": {
+                    "description": "返回数据"
+                },
+                "msg": {
+                    "description": "错误信息，如果状态码为200，msg为OK",
                     "type": "string"
                 }
             }
