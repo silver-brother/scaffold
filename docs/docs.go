@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/user": {
             "get": {
-                "description": "get user list",
+                "description": "用户列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,20 +28,34 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "user list",
+                "summary": "用户列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "返回用户信息",
+                        "description": "响应结果",
                         "schema": {
-                            "$ref": "#/definitions/handler.UserCreateRes"
+                            "$ref": "#/definitions/httpx.Resp"
                         }
                     }
                 }
             },
             "post": {
                 "description": "新增用户",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "分组名称"
                 ],
                 "summary": "新增用户",
                 "parameters": [
@@ -57,9 +71,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "返回用户信息",
+                        "description": "响应结果",
                         "schema": {
-                            "$ref": "#/definitions/handler.UserCreateRes"
+                            "$ref": "#/definitions/httpx.Resp"
                         }
                     }
                 }
@@ -95,8 +109,17 @@ const docTemplate = `{
                 }
             }
         },
-        "handler.UserCreateRes": {
-            "type": "object"
+        "httpx.Resp": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`

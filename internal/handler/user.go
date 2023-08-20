@@ -18,13 +18,13 @@ func NewUserHandle(svcCtx *service.ServiceContext) *UserHandle {
 	}
 }
 
-// List user list
-// @Summary user list
-// @Description get user list
+// @Summary 用户列表
+// @Description 用户列表
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} UserCreateRes "返回用户信息"
+// @Param id query int false "用户ID"
+// @Success 200 {object} httpx.Resp{} "响应结果"
 // @Router /user [get]
 func (l *UserHandle) List(ctx *gin.Context) {
 	user, err := l.svcCtx.DBClient.GetUserById(ctx, 1)
@@ -42,12 +42,13 @@ func (l *UserHandle) List(ctx *gin.Context) {
 	httpx.Success(ctx, user)
 }
 
-// Create 新增用户
 // @Summary 新增用户
 // @Description 新增用户
+// @Tags 分组名称
+// @Accept json
 // @Produce json
 // @Param body body UserCreateReq true "body参数"
-// @Success 200 {object} UserCreateRes "返回用户信息"
+// @Success 200 {object} httpx.Resp "响应结果"
 // @Router /user [post]
 func (l *UserHandle) Create(ctx *gin.Context) {
 	var req UserCreateReq

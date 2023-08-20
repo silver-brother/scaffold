@@ -19,7 +19,13 @@ definitions:
     - password
     - username
     type: object
-  handler.UserCreateRes:
+  httpx.Resp:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
     type: object
 info:
   contact: {}
@@ -28,18 +34,25 @@ paths:
     get:
       consumes:
       - application/json
-      description: get user list
+      description: 用户列表
+      parameters:
+      - description: 用户ID
+        in: query
+        name: id
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: 返回用户信息
+          description: 响应结果
           schema:
-            $ref: '#/definitions/handler.UserCreateRes'
-      summary: user list
+            $ref: '#/definitions/httpx.Resp'
+      summary: 用户列表
       tags:
       - user
     post:
+      consumes:
+      - application/json
       description: 新增用户
       parameters:
       - description: body参数
@@ -52,8 +65,10 @@ paths:
       - application/json
       responses:
         "200":
-          description: 返回用户信息
+          description: 响应结果
           schema:
-            $ref: '#/definitions/handler.UserCreateRes'
+            $ref: '#/definitions/httpx.Resp'
       summary: 新增用户
+      tags:
+      - 分组名称
 swagger: "2.0"

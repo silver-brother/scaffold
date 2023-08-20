@@ -36,6 +36,7 @@ func Router(r *gin.Engine, svcCtx *service.ServiceContext) {
 	userHandle := handler.NewUserHandle(svcCtx)
 	userGroup := r.Group("user")
 	{
-		userGroup.GET("/list", userHandle.List)
+		userGroup.GET("/", userHandle.List)
+		userGroup.POST("/", userHandle.Create)
 	}
 }

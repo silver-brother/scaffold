@@ -8,7 +8,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-type response struct {
+type Resp struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    any    `json:"data"`
@@ -20,7 +20,7 @@ func Success(ctx *gin.Context, data any) {
 	}
 	ctx.Header("trace-id", getTraceIdFromContext(ctx.Request.Context()))
 	ctx.Header("span-id", getSpanIdFromContext(ctx.Request.Context()))
-	resp := response{Code: http.StatusOK, Message: "success", Data: data}
+	resp := Resp{Code: http.StatusOK, Message: "success", Data: data}
 	ctx.JSON(http.StatusOK, resp)
 }
 
@@ -56,7 +56,7 @@ func Error(ctx *gin.Context, httpCode, code int, message string, data interface{
 	}
 	ctx.Header("trace-id", getTraceIdFromContext(ctx.Request.Context()))
 	ctx.Header("span-id", getSpanIdFromContext(ctx.Request.Context()))
-	resp := response{Code: code, Message: message, Data: data}
+	resp := Resp{Code: code, Message: message, Data: data}
 	ctx.JSON(httpCode, resp)
 }
 
