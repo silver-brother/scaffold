@@ -1,0 +1,20 @@
+Name: scaffold # 项目名称,日志截取也是按照这个来的
+Host: 0.0.0.0
+Port: 8927
+Mode: debug # debug / test / release
+
+Database:
+  DriverName: mysql
+  DataSource: root:Aa@123456@tcp(127.0.0.1:3306)/scaffold?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+Redis:
+  Addr: 127.0.0.1:6379
+  Password:
+  DB: 0
+
+Auth:
+  AccessSecret: $1$aab#21$8lYoGRrfeucwf9qIKxknY0
+  AccessExpire: 604800 # 7*24*3600
+
+Log:
+  Prefix: /Users/wsy/Workspace/go/scaffold

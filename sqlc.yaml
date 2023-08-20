@@ -1,0 +1,17 @@
+version: "2"
+sql:
+  - schema: "database/schema"
+    queries: "database/queries"
+    engine: "mysql"
+    gen:
+      go:
+        out: "internal/model"
+        package: "model"
+        sql_package: "database/sql"
+        emit_json_tags: true
+        emit_prepared_queries: false
+        emit_interface: true
+        emit_exact_table_names: false
+        emit_result_struct_pointers: true
+        json_tags_case_style: "snake"
+        

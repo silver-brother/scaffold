@@ -1,0 +1,7 @@
+.idea
+tmp
+logs/*
+test/logs/*
+install/model
+.DS_Store
+*/.DS_Store
