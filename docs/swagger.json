@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/user": {
+        "/v1/user": {
             "get": {
                 "description": "用户列表",
                 "consumes": [
@@ -67,13 +67,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/scaffold_common_httpx.Resp"
+                                    "$ref": "#/definitions/httpx.Resp"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/internal_handler.UserListRes"
+                                            "$ref": "#/definitions/handler.UserListRes"
                                         }
                                     }
                                 }
@@ -97,11 +97,11 @@
                 "parameters": [
                     {
                         "description": "body参数",
-                        "name": "body",
+                        "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_handler.UserCreateReq"
+                            "$ref": "#/definitions/handler.UserCreateReq"
                         }
                     }
                 ],
@@ -109,7 +109,7 @@
                     "200": {
                         "description": "响应结果",
                         "schema": {
-                            "$ref": "#/definitions/scaffold_common_httpx.Resp"
+                            "$ref": "#/definitions/httpx.Resp"
                         }
                     }
                 }
@@ -117,67 +117,120 @@
         }
     },
     "definitions": {
-        "internal_handler.UserCreateReq": {
+        "handler.UserCreateReq": {
             "type": "object",
             "required": [
-                "email",
-                "nickname",
-                "password",
-                "username"
+                "avatar",
+                "birth_date",
+                "care_type",
+                "description",
+                "id_card",
+                "mobile",
+                "name",
+                "sex"
             ],
             "properties": {
-                "age": {
-                    "type": "integer",
-                    "maximum": 120,
-                    "minimum": 1
-                },
-                "email": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_handler.UserListItem": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "description": "邮箱",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "用户ID",
-                    "type": "integer"
-                },
-                "nickname": {
-                    "description": "昵称",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "密码",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "用户名",
+                "avatar": {
+                    "description": "头像地址",
                     "type": "string",
-                    "example": "username"
+                    "example": "https://www.baidu.com/img/bd_logo1.png"
+                },
+                "birth_date": {
+                    "description": "生日 不得小于当前日期",
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "care_type": {
+                    "description": "1: 身份证 2: 护照",
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ],
+                    "example": 1
+                },
+                "description": {
+                    "description": "描述",
+                    "type": "string",
+                    "example": "这是一段人物的描述"
+                },
+                "id_card": {
+                    "description": "生份证或者护照号码",
+                    "type": "string",
+                    "example": "123456789012345678"
+                },
+                "mobile": {
+                    "description": "手机号",
+                    "type": "string",
+                    "example": "1389999999"
+                },
+                "name": {
+                    "description": "用户姓名，不得包含特殊字符",
+                    "type": "string",
+                    "example": "张三"
+                },
+                "sex": {
+                    "description": "M: 男性 F: 女性 O: 其他",
+                    "type": "string",
+                    "enum": [
+                        "M",
+                        "F",
+                        "O"
+                    ],
+                    "example": "O"
                 }
             }
         },
-        "internal_handler.UserListRes": {
+        "handler.UserListItem": {
+            "type": "object",
+            "required": [
+                "birth_date",
+                "name",
+                "sex"
+            ],
+            "properties": {
+                "avatar": {
+                    "type": "string",
+                    "example": "https://www.baidu.com/img/bd_logo1.png"
+                },
+                "birth_date": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "这是一个用户"
+                },
+                "id_card": {
+                    "type": "string",
+                    "example": "123456789012345678"
+                },
+                "mobile": {
+                    "type": "string",
+                    "example": "13888888888"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "张三"
+                },
+                "sex": {
+                    "description": "M: 男性 F: 女性 O: 其他",
+                    "type": "string",
+                    "enum": [
+                        "M",
+                        "F",
+                        "O"
+                    ]
+                }
+            }
+        },
+        "handler.UserListRes": {
             "type": "object",
             "properties": {
                 "list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/internal_handler.UserListItem"
+                        "$ref": "#/definitions/handler.UserListItem"
                     }
                 },
                 "total": {
@@ -185,7 +238,7 @@
                 }
             }
         },
-        "scaffold_common_httpx.Resp": {
+        "httpx.Resp": {
             "type": "object",
             "properties": {
                 "code": {

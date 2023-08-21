@@ -1,53 +1,97 @@
 definitions:
-  internal_handler.UserCreateReq:
+  handler.UserCreateReq:
     properties:
-      age:
-        maximum: 120
-        minimum: 1
+      avatar:
+        description: 头像地址
+        example: https://www.baidu.com/img/bd_logo1.png
+        type: string
+      birth_date:
+        description: 生日 不得小于当前日期
+        example: "2020-01-01"
+        type: string
+      care_type:
+        description: '1: 身份证 2: 护照'
+        enum:
+        - 1
+        - 2
+        example: 1
         type: integer
-      email:
+      description:
+        description: 描述
+        example: 这是一段人物的描述
         type: string
-      nickname:
+      id_card:
+        description: 生份证或者护照号码
+        example: "123456789012345678"
         type: string
-      password:
+      mobile:
+        description: 手机号
+        example: "1389999999"
         type: string
-      username:
+      name:
+        description: 用户姓名，不得包含特殊字符
+        example: 张三
+        type: string
+      sex:
+        description: 'M: 男性 F: 女性 O: 其他'
+        enum:
+        - M
+        - F
+        - O
+        example: O
         type: string
     required:
-    - email
-    - nickname
-    - password
-    - username
+    - avatar
+    - birth_date
+    - care_type
+    - description
+    - id_card
+    - mobile
+    - name
+    - sex
     type: object
-  internal_handler.UserListItem:
+  handler.UserListItem:
     properties:
-      email:
-        description: 邮箱
+      avatar:
+        example: https://www.baidu.com/img/bd_logo1.png
         type: string
-      id:
-        description: 用户ID
-        type: integer
-      nickname:
-        description: 昵称
+      birth_date:
+        example: "2020-01-01"
         type: string
-      password:
-        description: 密码
+      description:
+        example: 这是一个用户
         type: string
-      username:
-        description: 用户名
-        example: username
+      id_card:
+        example: "123456789012345678"
         type: string
+      mobile:
+        example: "13888888888"
+        type: string
+      name:
+        example: 张三
+        type: string
+      sex:
+        description: 'M: 男性 F: 女性 O: 其他'
+        enum:
+        - M
+        - F
+        - O
+        type: string
+    required:
+    - birth_date
+    - name
+    - sex
     type: object
-  internal_handler.UserListRes:
+  handler.UserListRes:
     properties:
       list:
         items:
-          $ref: '#/definitions/internal_handler.UserListItem'
+          $ref: '#/definitions/handler.UserListItem'
         type: array
       total:
         type: integer
     type: object
-  scaffold_common_httpx.Resp:
+  httpx.Resp:
     properties:
       code:
         description: 业务错误码,正常返回为200，错误返回为错误码
@@ -61,7 +105,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /user:
+  /v1/user:
     get:
       consumes:
       - application/json
@@ -104,10 +148,10 @@ paths:
           description: 响应结果
           schema:
             allOf:
-            - $ref: '#/definitions/scaffold_common_httpx.Resp'
+            - $ref: '#/definitions/httpx.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/internal_handler.UserListRes'
+                  $ref: '#/definitions/handler.UserListRes'
               type: object
       summary: 用户列表
       tags:
@@ -119,17 +163,17 @@ paths:
       parameters:
       - description: body参数
         in: body
-        name: body
+        name: payload
         required: true
         schema:
-          $ref: '#/definitions/internal_handler.UserCreateReq'
+          $ref: '#/definitions/handler.UserCreateReq'
       produces:
       - application/json
       responses:
         "200":
           description: 响应结果
           schema:
-            $ref: '#/definitions/scaffold_common_httpx.Resp'
+            $ref: '#/definitions/httpx.Resp'
       summary: 新增用户
       tags:
       - user

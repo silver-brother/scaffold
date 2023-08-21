@@ -24,6 +24,7 @@ type Config struct {
 	} `yaml:"Auth"`
 
 	Log struct { // 配置中心配置
+		Dir    string `yaml:"Dir"`
 		Prefix string `yaml:"Prefix"`
 	} `yaml:"Log"`
 }

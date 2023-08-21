@@ -37,7 +37,7 @@ type ListUserAccessLogByPaginationRow struct {
 	UserName  sql.NullString `json:"user_name"`
 }
 
-func (q *Queries) ListUserAccessLogByPagination(ctx context.Context, arg ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error) {
+func (q *Queries) ListUserAccessLogByPagination(ctx context.Context, arg *ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error) {
 	rows, err := q.db.QueryContext(ctx, listUserAccessLogByPagination, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err

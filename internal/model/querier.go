@@ -11,8 +11,8 @@ import (
 type Querier interface {
 	GetUserById(ctx context.Context, id uint64) (*User, error)
 	GetUserByIdCard(ctx context.Context, idCard string) (*User, error)
-	InsertUser(ctx context.Context, arg InsertUserParams) error
-	ListUserAccessLogByPagination(ctx context.Context, arg ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error)
+	InsertUser(ctx context.Context, arg *InsertUserParams) error
+	ListUserAccessLogByPagination(ctx context.Context, arg *ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error)
 	ListUserByIds(ctx context.Context, ids []uint64) ([]*User, error)
 }
 

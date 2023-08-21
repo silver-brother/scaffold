@@ -1,17 +1,14 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
-	"scaffold/internal/handler"
 	"scaffold/internal/middleware"
 	"scaffold/internal/service"
 	"time"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func Router(r *gin.Engine, svcCtx *service.ServiceContext) {
@@ -32,11 +29,7 @@ func Router(r *gin.Engine, svcCtx *service.ServiceContext) {
 	// swagger docs
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	// user handler
-	userHandle := handler.NewUserHandle(svcCtx)
-	userGroup := r.Group("user")
-	{
-		userGroup.GET("/", userHandle.List)
-		userGroup.POST("/", userHandle.Create)
-	}
+	// v1 router
+	v1 := r.Group("/v1")
+	V1Router(v1, svcCtx)
 }

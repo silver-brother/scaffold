@@ -15,11 +15,11 @@ func InitLog(cnf config.Config) zerolog.Logger {
 
 	// 配置 lumberjack 实例，用于日志文件分割
 	logFile := &lumberjack.Logger{
-		Filename:   "logs/server.log", // 日志文件名称
-		MaxSize:    10,                // 每个日志文件最大尺寸 (MB)
-		MaxBackups: 3,                 // 最多保留的旧日志文件数量
-		MaxAge:     30,                // 日志文件最多保留天数
-		Compress:   true,              // 是否压缩旧的日志文件
+		Filename:   cnf.Log.Dir + "/server.log", // 日志文件名称
+		MaxSize:    10,                          // 每个日志文件最大尺寸 (MB)
+		MaxBackups: 3,                           // 最多保留的旧日志文件数量
+		MaxAge:     30,                          // 日志文件最多保留天数
+		Compress:   true,                        // 是否压缩旧的日志文件
 	}
 	zerolog.TimestampFieldName = "ts"
 	zerolog.LevelFieldName = "lv"

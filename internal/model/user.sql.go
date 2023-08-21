@@ -76,7 +76,7 @@ type InsertUserParams struct {
 	Description string  `json:"description"`
 }
 
-func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
+func (q *Queries) InsertUser(ctx context.Context, arg *InsertUserParams) error {
 	_, err := q.db.ExecContext(ctx, insertUser,
 		arg.Name,
 		arg.Sex,
