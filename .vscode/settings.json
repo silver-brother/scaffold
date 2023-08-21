@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
         "errorx",
+        "gjson",
         "gonic",
         "httpx",
         "Msgf",
+        "stretchr",
+        "tidwall",
         "zerolog"
     ]
 }
