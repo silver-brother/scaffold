@@ -6,11 +6,11 @@ definitions:
         example: https://www.baidu.com/img/bd_logo1.png
         type: string
       birth_date:
-        description: 生日 不得小于当前日期
+        description: 生日
         example: "2020-01-01"
         type: string
       care_type:
-        description: '1: 身份证 2: 护照'
+        description: 1:身份证;2:护照
         enum:
         - 1
         - 2
@@ -21,7 +21,7 @@ definitions:
         example: 这是一段人物的描述
         type: string
       id_card:
-        description: 生份证或者护照号码
+        description: 证件号码
         example: "123456789012345678"
         type: string
       mobile:
@@ -29,11 +29,11 @@ definitions:
         example: "1389999999"
         type: string
       name:
-        description: 用户姓名，不得包含特殊字符
+        description: 姓名
         example: 张三
         type: string
       sex:
-        description: 'M: 男性 F: 女性 O: 其他'
+        description: 性别
         enum:
         - M
         - F
@@ -112,32 +112,36 @@ paths:
       description: 用户列表
       parameters:
       - description: 年龄
-        example: 101
         in: query
         name: age
         type: integer
-      - description: 生日
-        example: "2020-01-01"
+      - description: 生日 2020-01-01
         in: query
         name: birthday
         type: string
       - description: 邮箱
-        example: zhangsanfeng@163.com
         in: query
         name: email
         type: string
       - description: 手机号
-        example: "13888888888"
         in: query
         name: mobile
         type: string
       - description: 昵称
-        example: 张三疯
         in: query
         name: nickname
         type: string
+      - description: 页码
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - description: 每页条数
+        example: 10
+        in: query
+        name: page_size
+        type: integer
       - description: 用户名
-        example: 张三
         in: query
         name: username
         type: string

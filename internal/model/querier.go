@@ -14,6 +14,7 @@ type Querier interface {
 	InsertUser(ctx context.Context, arg *InsertUserParams) error
 	ListUserAccessLogByPagination(ctx context.Context, arg *ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error)
 	ListUserByIds(ctx context.Context, ids []uint64) ([]*User, error)
+	ListUserByPagination(ctx context.Context, arg *ListUserByPaginationParams) ([]*User, error)
 }
 
 var _ Querier = (*Queries)(nil)

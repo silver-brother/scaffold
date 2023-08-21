@@ -14,6 +14,12 @@ select *
 from user
 where id in (sqlc.slice('ids'));
 
+-- name: ListUserByPagination :many
+select *
+from user
+where 1
+limit ? offset ?;
+
 
 -- name: InsertUser :exec
 insert into user (name, sex, birth_date, id_card, mobile, avatar, description)

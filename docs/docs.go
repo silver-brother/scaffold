@@ -32,42 +32,50 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "example": 101,
                         "description": "年龄",
                         "name": "age",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "example": "2020-01-01",
-                        "description": "生日",
+                        "description": "生日 2020-01-01",
                         "name": "birthday",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "example": "zhangsanfeng@163.com",
                         "description": "邮箱",
                         "name": "email",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "example": "13888888888",
                         "description": "手机号",
                         "name": "mobile",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "example": "张三疯",
                         "description": "昵称",
                         "name": "nickname",
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "example": 10,
+                        "description": "每页条数",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
-                        "example": "张三",
                         "description": "用户名",
                         "name": "username",
                         "in": "query"
@@ -148,12 +156,12 @@ const docTemplate = `{
                     "example": "https://www.baidu.com/img/bd_logo1.png"
                 },
                 "birth_date": {
-                    "description": "生日 不得小于当前日期",
+                    "description": "生日",
                     "type": "string",
                     "example": "2020-01-01"
                 },
                 "care_type": {
-                    "description": "1: 身份证 2: 护照",
+                    "description": "1:身份证;2:护照",
                     "type": "integer",
                     "enum": [
                         1,
@@ -167,7 +175,7 @@ const docTemplate = `{
                     "example": "这是一段人物的描述"
                 },
                 "id_card": {
-                    "description": "生份证或者护照号码",
+                    "description": "证件号码",
                     "type": "string",
                     "example": "123456789012345678"
                 },
@@ -177,12 +185,12 @@ const docTemplate = `{
                     "example": "1389999999"
                 },
                 "name": {
-                    "description": "用户姓名，不得包含特殊字符",
+                    "description": "姓名",
                     "type": "string",
                     "example": "张三"
                 },
                 "sex": {
-                    "description": "M: 男性 F: 女性 O: 其他",
+                    "description": "性别",
                     "type": "string",
                     "enum": [
                         "M",

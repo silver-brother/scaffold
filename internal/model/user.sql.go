@@ -18,7 +18,7 @@ limit 1
 `
 
 func (q *Queries) GetUserById(ctx context.Context, id uint64) (*User, error) {
-	row := q.db.QueryRowContext(ctx, getUserById, id)
+	row := q.queryRow(ctx, q.getUserByIdStmt, getUserById, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -43,7 +43,7 @@ where id_card = ?
 `
 
 func (q *Queries) GetUserByIdCard(ctx context.Context, idCard string) (*User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByIdCard, idCard)
+	row := q.queryRow(ctx, q.getUserByIdCardStmt, getUserByIdCard, idCard)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -77,7 +77,7 @@ type InsertUserParams struct {
 }
 
 func (q *Queries) InsertUser(ctx context.Context, arg *InsertUserParams) error {
-	_, err := q.db.ExecContext(ctx, insertUser,
+	_, err := q.exec(ctx, q.insertUserStmt, insertUser,
 		arg.Name,
 		arg.Sex,
 		arg.BirthDate,
@@ -106,7 +106,54 @@ func (q *Queries) ListUserByIds(ctx context.Context, ids []uint64) ([]*User, err
 	} else {
 		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
 	}
-	rows, err := q.db.QueryContext(ctx, query, queryParams...)
+	rows, err := q.query(ctx, nil, query, queryParams...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+			&i.Name,
+			&i.Sex,
+			&i.BirthDate,
+			&i.IDCard,
+			&i.Mobile,
+			&i.Avatar,
+			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listUserByPagination = `-- name: ListUserByPagination :many
+select id, created_at, updated_at, deleted_at, name, sex, birth_date, id_card, mobile, avatar, description
+from user
+where 1
+limit ? offset ?
+`
+
+type ListUserByPaginationParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) ListUserByPagination(ctx context.Context, arg *ListUserByPaginationParams) ([]*User, error) {
+	rows, err := q.query(ctx, q.listUserByPaginationStmt, listUserByPagination, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"scaffold/common/errorx"
 	"scaffold/common/httpx"
 	"scaffold/internal/model"
 	"scaffold/internal/service"
@@ -38,20 +37,32 @@ func (l *UserHandle) List(ctx *gin.Context) {
 		return
 	}
 
+	limit, offset := httpx.Pagination(req.Page, req.PageSize)
+
 	// 数据查询
-	user, err := l.svcCtx.DBClient.GetUserById(ctx, 1)
-	exists, err := errorx.CheckDBErr(err)
+	user, err := l.svcCtx.DBClient.ListUserByPagination(ctx, &model.ListUserByPaginationParams{Limit: limit, Offset: offset})
 	if err != nil {
 		l.svcCtx.Log.Error().Ctx(ctx.Request.Context()).Msg(err.Error())
 		httpx.Error500(ctx)
 		return
 	}
-	if !exists {
-		l.svcCtx.Log.Error().Ctx(ctx.Request.Context()).Msgf("user not found, id: %d", 1)
-		httpx.Error200(ctx, http.StatusNotFound, errorx.NoData)
-		return
+
+	list := make([]*UserListItem, 0)
+	for _, item := range user {
+		list = append(list, &UserListItem{
+			Name:        item.Name,
+			Sex:         string(item.Sex),
+			BirthDate:   item.BirthDate,
+			IDCard:      item.IDCard,
+			Mobile:      item.Mobile,
+			Avatar:      item.Avatar,
+			Description: item.Description,
+		})
 	}
-	httpx.Success(ctx, user)
+	httpx.Success(ctx, UserListRes{
+		Total: 0,
+		List:  list,
+	})
 }
 
 // Create 新增用户
@@ -74,14 +85,19 @@ func (l *UserHandle) Create(ctx *gin.Context) {
 	}
 
 	err = l.svcCtx.DBClient.InsertUser(ctx, &model.InsertUserParams{
-		Name:        "",
-		Sex:         "",
-		BirthDate:   "",
-		IDCard:      "",
-		Mobile:      "",
-		Avatar:      "",
-		Description: "",
+		Name:        req.Name,
+		Sex:         model.UserSex(req.Sex),
+		BirthDate:   req.BirthDate,
+		IDCard:      req.IDCard,
+		Mobile:      req.Mobile,
+		Avatar:      req.Avatar,
+		Description: req.Description,
 	})
+	if err != nil {
+		l.svcCtx.Log.Error().Ctx(ctx.Request.Context()).Msg(err.Error())
+		httpx.Error500(ctx)
+		return
+	}
 
 	httpx.Success(ctx, nil)
 }

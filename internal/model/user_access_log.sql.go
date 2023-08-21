@@ -38,7 +38,7 @@ type ListUserAccessLogByPaginationRow struct {
 }
 
 func (q *Queries) ListUserAccessLogByPagination(ctx context.Context, arg *ListUserAccessLogByPaginationParams) ([]*ListUserAccessLogByPaginationRow, error) {
-	rows, err := q.db.QueryContext(ctx, listUserAccessLogByPagination, arg.Limit, arg.Offset)
+	rows, err := q.query(ctx, q.listUserAccessLogByPaginationStmt, listUserAccessLogByPagination, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
